@@ -11,7 +11,7 @@ import (
 )
 
 func GetNetworkList(filterKey string, filterValue string) (networks []model.NetworkDigest, err error) {
-	client := &http.Client{Transport:util.GetUnixTransport(),}
+	client := &http.Client{Transport: util.GetUnixTransport(),}
 	req, err := http.NewRequest(http.MethodGet, config.DockerNetworkAddress, nil)
 	if err != nil {
 		return
@@ -19,7 +19,7 @@ func GetNetworkList(filterKey string, filterValue string) (networks []model.Netw
 
 	if filterKey != "" {
 		if filterValue == "" {
-			err = errors.New(filterKey+" value is empty")
+			err = errors.New(filterKey + " value is empty")
 			return
 		}
 		q := req.URL.Query()
@@ -41,7 +41,7 @@ func GetNetworkList(filterKey string, filterValue string) (networks []model.Netw
 }
 
 func GetNetworkById(id string) (network model.NetworkFull, err error) {
-	client := &http.Client{Transport:util.GetUnixTransport(),}
+	client := &http.Client{Transport: util.GetUnixTransport(),}
 	req, err := http.NewRequest(http.MethodGet, config.DockerNetworkAddress+"/"+id, nil)
 	if err != nil {
 		return
@@ -66,7 +66,7 @@ func CreateNetwork(network model.NetworkCreateReq) (networkRsp model.NetworkCrea
 		return
 	}
 
-	client := &http.Client{Transport:util.GetUnixTransport(),}
+	client := &http.Client{Transport: util.GetUnixTransport(),}
 	req, err := http.NewRequest(http.MethodPost, config.DockerNetworkAddress+"/create", bytes.NewBuffer(values))
 	if err != nil {
 		return
@@ -83,5 +83,22 @@ func CreateNetwork(network model.NetworkCreateReq) (networkRsp model.NetworkCrea
 	if err = decoder.Decode(&networkRsp); err != nil {
 		return
 	}
+	return
+}
+
+func DeleteNetworkById(id string) (respCode int, err error) {
+	client := &http.Client{Transport: util.GetUnixTransport(),}
+	req, err := http.NewRequest(http.MethodDelete, config.DockerNetworkAddress+"/"+id, nil)
+	if err != nil {
+		return
+	}
+
+	rsp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	defer rsp.Body.Close()
+
+	respCode = rsp.StatusCode
 	return
 }

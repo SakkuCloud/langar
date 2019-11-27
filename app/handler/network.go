@@ -50,8 +50,8 @@ func GetNetworks(w http.ResponseWriter, r *http.Request) {
 func GetNetwork(w http.ResponseWriter, r *http.Request) {
 	networkId := mux.Vars(r)["id"]
 	if networkId == "" {
-		log.Warnf("Invalid request, empty container id")
-		respondMessage(w, http.StatusBadRequest, "Invalid request, empty container id")
+		log.Warnf("Invalid request, empty network id")
+		respondMessage(w, http.StatusBadRequest, "Invalid request, empty network id")
 		return
 	}
 
@@ -97,4 +97,41 @@ func CreateNetwork(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("Network created, %s", rsp.Id)
 	respondJSON(w, http.StatusCreated, rsp)
+}
+
+func DeleteNetwork(w http.ResponseWriter, r *http.Request) {
+	networkId := mux.Vars(r)["id"]
+	if networkId == "" {
+		log.Warnf("Invalid request, empty network id")
+		respondMessage(w, http.StatusBadRequest, "Invalid request, empty network id")
+		return
+	}
+
+	rsp, err := service.DeleteNetworkById(networkId)
+	if err != nil {
+		log.Warnf("Cannot delete network, %s", err.Error())
+		respondMessage(w, http.StatusInternalServerError, "Cannot delete network")
+		return
+	}
+
+	if rsp == http.StatusNotFound {
+		log.Warnf("Cannot delete network, no such network")
+		respondMessage(w, http.StatusNotFound , "Cannot delete network, no such network")
+		return
+	}
+
+	if rsp == http.StatusForbidden {
+		log.Warnf("Cannot delete network, operation not supported for pre-defined networks")
+		respondMessage(w, http.StatusBadRequest, "Cannot delete network, operation not supported for pre-defined networks")
+		return
+	}
+
+	if rsp == http.StatusInternalServerError {
+		log.Warnf("something went wrong")
+		respondMessage(w, http.StatusInternalServerError, "Cannot delete network, something went wrong")
+		return
+	}
+
+	log.Infof("Network deleted, %s", networkId)
+	respondJSON(w, http.StatusNoContent, nil)
 }

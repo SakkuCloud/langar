@@ -30,9 +30,10 @@ func (a *App) Init() {
 func (a *App) setRouters() {
 	APISubRouter := a.Router.PathPrefix("/api").Subrouter()
 
-	APISubRouter.HandleFunc("/network", a.GetNetworks).Methods("GET")
-	APISubRouter.HandleFunc("/network/{id}", a.GetNetwork).Methods("GET")
-	APISubRouter.HandleFunc("/network", a.CreateNetwork).Methods("POST")
+	APISubRouter.HandleFunc("/network", a.GetNetworks).Methods(http.MethodGet)
+	APISubRouter.HandleFunc("/network/{id}", a.GetNetwork).Methods(http.MethodGet)
+	APISubRouter.HandleFunc("/network", a.CreateNetwork).Methods(http.MethodPost)
+	APISubRouter.HandleFunc("/network/{id}", a.DeleteNetwork).Methods(http.MethodDelete)
 }
 
 // NETWORK
@@ -51,6 +52,12 @@ func (a *App) GetNetwork(w http.ResponseWriter, r *http.Request) {
 func (a *App) CreateNetwork(w http.ResponseWriter, r *http.Request) {
 	if handler.IsAuthorized(w, r, a.Auth) {
 		handler.CreateNetwork(w, r)
+	}
+}
+
+func (a *App) DeleteNetwork(w http.ResponseWriter, r *http.Request) {
+	if handler.IsAuthorized(w, r, a.Auth) {
+		handler.DeleteNetwork(w, r)
 	}
 }
 
