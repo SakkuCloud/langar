@@ -5,10 +5,13 @@ import "time"
 const (
 	SentryTimeout time.Duration = 10
 
-	DockerTimeout time.Duration = 10
+	DockerAPIVersion     string = "1.41"
+	DockerNetworkAddress string = "http://" + DockerAPIVersion + "/networks"
 
 	InvalidArgsMessage string = "invalid args"
 )
+
+var NetworkFilterMap = map[string]string{"d": "driver"}
 
 var Config = struct {
 	Port    string `default:"3000"`
@@ -18,4 +21,8 @@ var Config = struct {
 
 	AccessKey string `required:"true"`
 	SecretKey string `required:"true"`
+
+	Docker struct {
+		Host string `default:"/run/docker.sock"`
+	}
 }{}
