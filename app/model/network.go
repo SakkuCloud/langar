@@ -1,6 +1,6 @@
 package model
 
-type Network struct {
+type NetworkFull struct {
 	Id         string                          `json:"Id"`
 	Name       string                          `json:"Name"`
 	Created    string                          `json:"Created"`
@@ -30,6 +30,7 @@ type NetworkIPAM struct {
 type NetworkIPAMConfig struct {
 	Subnet  string `json:"Subnet"`
 	Gateway string `json:"Gateway"`
+	IPRange string `json:"IPRange"`
 }
 
 type NetworkContainerInfo struct {
@@ -45,4 +46,21 @@ type NetworkOptions struct {
 	BridgeHostBindingIPv4 string `json:"com.docker.network.bridge.host_binding_ipv4"`
 	BridgeName            string `json:"com.docker.network.bridge.name"`
 	DriverMTU             string `json:"com.docker.network.driver.mtu"`
+}
+
+type NetworkCreateReq struct {
+	Name           string         `json:"Name"`
+	CheckDuplicate bool           `json:"CheckDuplicate"`
+	Driver         string         `json:"Driver"`
+	IPAM           NetworkIPAM    `json:"IPAM"`
+	Internal       bool           `json:"Internal"`
+	Attachable     bool           `json:"Attachable"`
+	Ingress        bool           `json:"Ingress"`
+	Options        NetworkOptions `json:"Options"`
+}
+
+type NetworkCreateResp struct {
+	Id      string `json:"Id"`
+	Warning string `json:"Warning"`
+	Message string `json:"message"`
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"langar/app/model"
@@ -39,7 +40,7 @@ func GetNetworkList(filterKey string, filterValue string) (networks []model.Netw
 	return
 }
 
-func GetNetworkById(id string) (network model.Network, err error) {
+func GetNetworkById(id string) (network model.NetworkFull, err error) {
 	client := &http.Client{Transport:util.GetUnixTransport(),}
 	req, err := http.NewRequest(http.MethodGet, config.DockerNetworkAddress+"/"+id, nil)
 	if err != nil {
@@ -54,6 +55,32 @@ func GetNetworkById(id string) (network model.Network, err error) {
 
 	decoder := json.NewDecoder(rsp.Body)
 	if err = decoder.Decode(&network); err != nil {
+		return
+	}
+	return
+}
+
+func CreateNetwork(network model.NetworkCreateReq) (networkRsp model.NetworkCreateResp, err error) {
+	values, err := json.Marshal(network)
+	if err != nil {
+		return
+	}
+
+	client := &http.Client{Transport:util.GetUnixTransport(),}
+	req, err := http.NewRequest(http.MethodPost, config.DockerNetworkAddress+"/create", bytes.NewBuffer(values))
+	if err != nil {
+		return
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	rsp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	defer rsp.Body.Close()
+
+	decoder := json.NewDecoder(rsp.Body)
+	if err = decoder.Decode(&networkRsp); err != nil {
 		return
 	}
 	return

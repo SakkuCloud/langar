@@ -32,6 +32,7 @@ func (a *App) setRouters() {
 
 	APISubRouter.HandleFunc("/network", a.GetNetworks).Methods("GET")
 	APISubRouter.HandleFunc("/network/{id}", a.GetNetwork).Methods("GET")
+	APISubRouter.HandleFunc("/network", a.CreateNetwork).Methods("POST")
 }
 
 // NETWORK
@@ -44,6 +45,12 @@ func (a *App) GetNetworks(w http.ResponseWriter, r *http.Request) {
 func (a *App) GetNetwork(w http.ResponseWriter, r *http.Request) {
 	if handler.IsAuthorized(w, r, a.Auth) {
 		handler.GetNetwork(w, r)
+	}
+}
+
+func (a *App) CreateNetwork(w http.ResponseWriter, r *http.Request) {
+	if handler.IsAuthorized(w, r, a.Auth) {
+		handler.CreateNetwork(w, r)
 	}
 }
 

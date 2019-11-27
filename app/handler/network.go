@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"encoding/json"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
+	"langar/app/model"
 	"langar/app/service"
 	"langar/config"
 	"net/http"
@@ -68,4 +70,31 @@ func GetNetwork(w http.ResponseWriter, r *http.Request) {
 
 	log.Infof("Network info sent, %s", network.Id)
 	respondJSON(w, http.StatusOK, network)
+}
+
+func CreateNetwork(w http.ResponseWriter, r *http.Request) {
+	network := model.NetworkCreateReq{}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&network); err != nil {
+		log.Warnf("Cannot decode network object in CreateNetwork, %s", err.Error())
+		respondMessage(w, http.StatusBadRequest, "Cannot decode object")
+		return
+	}
+	defer r.Body.Close()
+
+	rsp, err := service.CreateNetwork(network)
+	if err != nil {
+		log.Warnf("Cannot create network, %s", err.Error())
+		respondMessage(w, http.StatusInternalServerError, "Cannot create network")
+		return
+	}
+
+	if rsp.Id == "" {
+		log.Warnf("Cannot create network, %s", rsp.Message)
+		respondMessage(w, http.StatusBadRequest, rsp.Message)
+		return
+	}
+
+	log.Infof("Network created, %s", rsp.Id)
+	respondJSON(w, http.StatusCreated, rsp)
 }
