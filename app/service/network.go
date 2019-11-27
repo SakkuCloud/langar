@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func GetNetworkList(filterKey string, filterValue string) (networks []model.Network, err error) {
+func GetNetworkList(filterKey string, filterValue string) (networks []model.NetworkDigest, err error) {
 	client := &http.Client{Transport:util.GetUnixTransport(),}
 	req, err := http.NewRequest(http.MethodGet, config.DockerNetworkAddress, nil)
 	if err != nil {
