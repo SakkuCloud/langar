@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"langar/app/service"
 	"langar/config"
@@ -32,6 +33,7 @@ func GetNetworks(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// call service
 	networks, err := service.GetNetworkList(filterKey,filterValue)
 	if err != nil {
 		log.Warnf("Cannot fetch network list, %s", err.Error())
@@ -39,5 +41,31 @@ func GetNetworks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Infof("Network list info sent")
 	respondJSON(w, http.StatusOK, networks)
+}
+
+func GetNetwork(w http.ResponseWriter, r *http.Request) {
+	networkId := mux.Vars(r)["id"]
+	if networkId == "" {
+		log.Warnf("Invalid request, empty container id")
+		respondMessage(w, http.StatusBadRequest, "Invalid request, empty container id")
+		return
+	}
+
+	network, err := service.GetNetworkById(networkId)
+	if err != nil {
+		log.Warnf("Cannot get network info, %s", err.Error())
+		respondMessage(w, http.StatusInternalServerError, "Cannot get network info")
+		return
+	}
+
+	if network.Id == "" {
+		log.Warnf("Network not found, %s", networkId)
+		respondMessage(w, http.StatusNotFound, "Object not found")
+		return
+	}
+
+	log.Infof("Network info sent, %s", network.Id)
+	respondJSON(w, http.StatusOK, network)
 }

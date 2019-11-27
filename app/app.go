@@ -31,12 +31,19 @@ func (a *App) setRouters() {
 	APISubRouter := a.Router.PathPrefix("/api").Subrouter()
 
 	APISubRouter.HandleFunc("/network", a.GetNetworks).Methods("GET")
+	APISubRouter.HandleFunc("/network/{id}", a.GetNetwork).Methods("GET")
 }
 
 // NETWORK
 func (a *App) GetNetworks(w http.ResponseWriter, r *http.Request) {
 	if handler.IsAuthorized(w, r, a.Auth) {
 		handler.GetNetworks(w, r)
+	}
+}
+
+func (a *App) GetNetwork(w http.ResponseWriter, r *http.Request) {
+	if handler.IsAuthorized(w, r, a.Auth) {
+		handler.GetNetwork(w, r)
 	}
 }
 

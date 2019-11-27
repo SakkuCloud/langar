@@ -38,3 +38,23 @@ func GetNetworkList(filterKey string, filterValue string) (networks []model.Netw
 	}
 	return
 }
+
+func GetNetworkById(id string) (network model.Network, err error) {
+	client := &http.Client{Transport:util.GetUnixTransport(),}
+	req, err := http.NewRequest(http.MethodGet, config.DockerNetworkAddress+"/"+id, nil)
+	if err != nil {
+		return
+	}
+
+	rsp, err := client.Do(req)
+	if err != nil || (rsp.StatusCode != http.StatusOK) {
+		return
+	}
+	defer rsp.Body.Close()
+
+	decoder := json.NewDecoder(rsp.Body)
+	if err = decoder.Decode(&network); err != nil {
+		return
+	}
+	return
+}
