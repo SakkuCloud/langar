@@ -1,0 +1,12 @@
+port: 3000
+logfile: /var/log/langar.log
+
+sentrydsn: dsn-url
+
+// required
+accesskey: my-awesome-access
+// required
+secretkey: Super$3crT
+
+docker:
+  socket: /run/docker.sock
