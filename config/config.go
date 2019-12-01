@@ -23,6 +23,6 @@ var Config = struct {
 	SecretKey string `required:"true"`
 
 	Docker struct {
-		Host string `default:"/run/docker.sock"`
+		Socket string `default:"/run/docker.sock"`
 	}
 }{}

@@ -10,7 +10,7 @@ import (
 func GetUnixTransport() *http.Transport {
 	return &http.Transport{
 		DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
-			return net.Dial("unix", config.Config.Docker.Host)
+			return net.Dial("unix", config.Config.Docker.Socket)
 		},
 	}
 }
