@@ -56,7 +56,7 @@ type NetworkCreateReq struct {
 	Internal       bool           `json:"Internal"`
 	Attachable     bool           `json:"Attachable"`
 	Ingress        bool           `json:"Ingress"`
-	Options        NetworkOptions `json:"Options"`
+	//Options        NetworkOptions `json:"Options"`
 }
 
 type NetworkCreateResp struct {
