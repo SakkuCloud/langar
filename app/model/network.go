@@ -11,7 +11,7 @@ type NetworkFull struct {
 	Attachable bool                            `json:"Attachable"`
 	Ingress    bool                            `json:"Ingress"`
 	Containers map[string]NetworkContainerInfo `json:"Containers"`
-	Options    NetworkOptions                  `json:"Options"`
+	//Options    NetworkOptions                  `json:"Options"`
 }
 
 type NetworkDigest struct {
