@@ -114,7 +114,8 @@ curl -X POST \
  -d '{
 "Name":"test-net",
 "CheckDuplicate":true,
-"Driver":"bridge",
+"Attachable":true,
+"Driver":"overlay",
 "IPAM":{
 "Driver": "default",
 "Config":[
@@ -125,14 +126,7 @@ curl -X POST \
 }
 ]
 },
-"Internal":true,
-"Options": {
-"com.docker.network.bridge.default_bridge": "true",
-"com.docker.network.bridge.enable_ip_masquerade": "true",
-"com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
-"com.docker.network.bridge.name": "docker0",
-"com.docker.network.driver.mtu": "1500"
-}
+"Internal":true
 }
 '
 ```
