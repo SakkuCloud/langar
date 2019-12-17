@@ -30,10 +30,17 @@ func (a *App) Init() {
 func (a *App) setRouters() {
 	APISubRouter := a.Router.PathPrefix("/api").Subrouter()
 
+	APISubRouter.HandleFunc("/health", a.GetHealth).Methods(http.MethodGet)
+
 	APISubRouter.HandleFunc("/network", a.GetNetworks).Methods(http.MethodGet)
 	APISubRouter.HandleFunc("/network/{id}", a.GetNetwork).Methods(http.MethodGet)
 	APISubRouter.HandleFunc("/network", a.CreateNetwork).Methods(http.MethodPost)
 	APISubRouter.HandleFunc("/network/{id}", a.DeleteNetwork).Methods(http.MethodDelete)
+}
+
+// HEALTH
+func (a *App) GetHealth(w http.ResponseWriter, r *http.Request) {
+	handler.GetHealth(w, r)
 }
 
 // NETWORK

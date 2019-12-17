@@ -12,6 +12,7 @@ const (
 )
 
 var NetworkFilterMap = map[string]string{"d": "driver"}
+var StartTime time.Time
 
 var Config = struct {
 	Port    string `default:"3000"`
