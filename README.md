@@ -12,6 +12,7 @@ Langar (لنگر in Persian) means Anchor.
   * [Get network info](https://github.com/SakkuCloud/langar#get-network-info)
   * [Create network](https://github.com/SakkuCloud/langar#create-network)
   * [Delete network](https://github.com/SakkuCloud/langar#delete-network)
+  * [Health](https://github.com/SakkuCloud/langar#health)
 * [To do](https://github.com/SakkuCloud/langar#to-do)
 
 # Motivations
@@ -140,6 +141,12 @@ curl -X DELETE \
  -H 'service-key: Super$3crT' 
 ```
 
+### Health
+Get Server health (status, uptime and server time).
+```sh
+curl -X GET \
+ http://127.0.0.1:3000/api/health 
+```
 
 # To do
 * Add container to network
